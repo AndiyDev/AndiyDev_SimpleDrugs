@@ -21,3 +21,12 @@
 + STABILITY: Improved logic for config entries without removal requirements.
 + SECURITY: Reinforced Double-Validation flow between client and server.
 + OPTIMIZATION: Simplified animation table passing in client-side processing.
+
+[v1.0.4] - The Production Update
+-------------------------------------------
++ SECURITY: Implemented 'isBusy' state on client to prevent progress bar stacking and reward exploits.
++ DX: Added EmmyLua type annotations to Config.lua for smart error-checking and autocompletion.
++ REFACTOR: Fully modularized server-side validation with checkWeight and checkRequirements.
++ DOCUMENTATION: Added comprehensive README.md with configuration guides and credit.
++ FIX: Resolved logic error where players remained stuck in a busy state after completion.
++ STABILITY: Improved logic for config entries that do not require item removal.
