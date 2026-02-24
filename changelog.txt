@@ -5,3 +5,8 @@
 + Added native RegisterKeyMapping fallback
 + Fixed progress bar sync issues
 - Removed old framework-specific exports
+
+[v1.0.2] - Samll Update
+----------------------------------
++ Optimized manifest to load specific config files.
++ Cleaned up config.lua (Removed debug mode and syntax clutter).

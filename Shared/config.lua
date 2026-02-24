@@ -1,8 +1,6 @@
 Config = {}
 
-Config.Debug = false,
-
-Config.KeyBind = 'E',
+Config.KeyBind = 'E'
 
 --[[ CreateDrug information
     {

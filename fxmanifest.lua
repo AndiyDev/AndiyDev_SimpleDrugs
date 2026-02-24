@@ -1,7 +1,7 @@
 fx_version 'cerulean'
 game 'gta5'
 lua54 'yes'
-version '1.0.1'
+version '1.0.2'
 
 author 'AndiyDev'
 description 'Something that just works'
@@ -9,7 +9,7 @@ description 'Something that just works'
 shared_script {
     --'@es_extended/import.lua',
     '@ox_lib/init.lua',
-    'Shared/*'
+    'Shared/config.lua'
 }
 
 client_scripts {
