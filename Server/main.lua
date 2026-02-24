@@ -1,41 +1,57 @@
-lib.callback.register('AndiyDev_SimpleDrugs:processItems', function(source, index)
-    local src = source
-    local cfg = Config.CreatedDrug[index]
+local function checkWeight(src, cfg)
+    if not cfg.getitem then return true end
+    
+    for _, data in ipairs(cfg.getitem) do
+        if not Bridge.CanCarryItem(src, data.item, data.amount) then
+            Bridge.Notify(src, "Your inventory is too heavy!", 'error')
+            return false
+        end
+    end
+    return true
+end
 
-    -- Basic Index Check
+local function checkRequirements(src, cfg)
+    if not cfg.removeitem then return true end
+    
+    for _, req in ipairs(cfg.removeitem) do
+        local count = Bridge.GetItemCount(src, req.item)
+        if count < req.amount then
+            Bridge.Notify(src, ("You need %sx %s"):format(req.amount, req.item), 'error')
+            return false
+        end
+    end
+    return true
+end
+
+local function canUserPerformAction(src, configId)
+    local cfg = Config.CreatedDrug[configId]
     if not cfg then return false end
 
-    -- PRE-CHECK: Requirements
-    if type(cfg.removeitem) == 'table' and #cfg.removeitem > 0 then
-        for _, data in ipairs(cfg.removeitem) do
-            if Bridge.GetItemCount(src, data.item) < data.amount then
-                Bridge.Notify(src, ("Missing: %sx %s"):format(data.amount, data.item), 'error')
-                return false
-            end
+    -- Check both conditions
+    if not checkRequirements(src, cfg) then return false end
+    if not checkWeight(src, cfg) then return false end
+
+    return true
+end
+
+lib.callback.register('AndiyDev_SimpleDrugs:callback:validateItems', function(source, configId)
+    return canUserPerformAction(source, configId)
+end)
+
+lib.callback.register('AndiyDev_SimpleDrugs:processItems', function(source, configId)
+    if not canUserPerformAction(source, configId) then return false end
+    
+    local cfg = Config.CreatedDrug[configId]
+
+    if cfg.removeitem then
+        for _, v in ipairs(cfg.removeitem) do 
+            Bridge.RemoveItem(source, v.item, v.amount) 
         end
     end
-
-    -- PRE-CHECK: Weight
-    if type(cfg.getitem) == 'table' and #cfg.getitem > 0 then
-        for _, data in ipairs(cfg.getitem) do
-            if not Bridge.CanCarryItem(src, data.item, data.amount) then
-                Bridge.Notify(src, "Your inventory is too heavy!", 'error')
-                return false
-            end
-        end
-    end
-
-    -- EXECUTION: Remove
-    if type(cfg.removeitem) == 'table' then
-        for _, data in ipairs(cfg.removeitem) do
-            Bridge.RemoveItem(src, data.item, data.amount)
-        end
-    end
-
-    -- EXECUTION: Add
-    if type(cfg.getitem) == 'table' then
-        for _, data in ipairs(cfg.getitem) do
-            Bridge.AddItem(src, data.item, data.amount)
+    
+    if cfg.getitem then
+        for _, v in ipairs(cfg.getitem) do 
+            Bridge.AddItem(source, v.item, v.amount) 
         end
     end
 
@@ -47,7 +63,6 @@ local function CheckVersion()
     local resourceName = GetCurrentResourceName()
     local githubRepo = "AndiyDev/AndiyDev_SimpleDrugs" 
 
-    -- 1. Check Version
     PerformHttpRequest(('https://raw.githubusercontent.com/%s/main/version.txt'):format(githubRepo), function(errorCode, result, headers)
         if errorCode ~= 200 then return end
 
@@ -56,7 +71,6 @@ local function CheckVersion()
         if latestVersion ~= currentVersion then
             print(("^3[%s] A new update is available! (v%s -> v%s)^7"):format(resourceName, currentVersion, latestVersion))
             
-            -- 2. Fetch Change Log if an update is found
             PerformHttpRequest(('https://raw.githubusercontent.com/%s/main/changelog.txt'):format(githubRepo), function(logCode, logResult, logHeaders)
                 if logCode == 200 and logResult then
                     print("^5--- CHANGE LOG ---^7")
@@ -71,8 +85,7 @@ local function CheckVersion()
     end, 'GET')
 end
 
--- Run the check when the resource starts
 Citizen.CreateThread(function()
-    Citizen.Wait(5000) -- Wait 5 seconds to ensure console is clear
+    Citizen.Wait(5000)
     CheckVersion()
 end)

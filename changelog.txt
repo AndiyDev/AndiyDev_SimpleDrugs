@@ -10,3 +10,14 @@
 ----------------------------------
 + Optimized manifest to load specific config files.
 + Cleaned up config.lua (Removed debug mode and syntax clutter).
+
+[v1.0.3] - The Modular & Security Update
+-------------------------------------------
++ REFACTOR: Modularized server-side validation into helper functions.
++ LOGIC: Centralized 'checkWeight' and 'checkRequirements' for cleaner code.
++ FIXED: Resolved variable scope errors preventing global function access.
++ FIXED: Implemented 'isBusy' state on client to prevent multiple progress bars/spamming.
++ FIXED: Resolved logic error where players remained stuck in a 'busy' state after completion.
++ STABILITY: Improved logic for config entries without removal requirements.
++ SECURITY: Reinforced Double-Validation flow between client and server.
++ OPTIMIZATION: Simplified animation table passing in client-side processing.
