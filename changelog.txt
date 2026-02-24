@@ -1,0 +1,7 @@
+[v1.0.1] - The Optimization Update
+----------------------------------
++ Added universal bridge for ESX/QB/QBX
++ Integrated weight checks to prevent item loss
++ Added native RegisterKeyMapping fallback
++ Fixed progress bar sync issues
+- Removed old framework-specific exports
