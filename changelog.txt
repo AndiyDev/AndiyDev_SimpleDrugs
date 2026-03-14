@@ -30,3 +30,9 @@
 + DOCUMENTATION: Added comprehensive README.md with configuration guides and credit.
 + FIX: Resolved logic error where players remained stuck in a busy state after completion.
 + STABILITY: Improved logic for config entries that do not require item removal.
+
+[v1.0.5] -- Improvement Update
+--------------------------------------
++ MONEY: Implemented 'money' functions to handle player money transactions.
++ REFACTOR: Simplified server-side validation with checkWeight and checkRequirements.
++ OVERALL: Code cleanup and fixes

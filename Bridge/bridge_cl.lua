@@ -48,6 +48,17 @@ function Bridge.HideText()
     end
 end
 
+-- Notifcation UI
+function Bridge.ShowNotification(message, type)
+    if GetResourceState('ox_lib') == 'started' then
+        lib.notify({ description = message, type = type or 'inform' })
+    elseif FrameworkName == 'qb' or FrameworkName == 'qbx' then
+        exports['qb-core']:DrawText(message, 'left') -- Fallback notify
+    elseif FrameworkName == 'esx' then
+        ESX.ShowNotification(message)
+    end
+end
+
 -- PROGRESS BAR (Supports Promise for Sync usage)
 function Bridge.Progress(duration, label, anim)
     if GetResourceState('ox_lib') == 'started' then
@@ -83,10 +94,7 @@ function Bridge.RegKeybind(name, desc, defaultKey, onPress)
             onPressed = onPress
         })
     else
-        -- FALLBACK: FiveM RegisterKeyMapping (Best performance)
-        -- This creates a command that can be seen in Settings -> Key Bindings -> FiveM
         RegisterCommand(name, function()
-            -- We call the onPress function passed by the script
             onPress()
         end, false)
 

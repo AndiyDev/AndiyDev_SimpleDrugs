@@ -5,7 +5,11 @@
 ---@class DrugProgress
 ---@field time number Duration in seconds
 ---@field label string The text to display on the progress bar
+---@field canCancel? boolean (Optional) Whether the progress can be cancelled
+---@field disable? table (Optional) Table of things to disable during the progress (e.g., { car = true })
 ---@field anim? table { dict: string, clip: string } (Optional) Animation data
+---@field prop? table { model: number, pos: vector3, rot: vector3 } (Optional) Prop data for the first prop
+---@field propTwo? table { model: number, pos: vector3, rot: vector3 } (Optional) Prop data for the second prop
 
 ---@class DrugConfig
 ---@field label string The text shown in the TextUI
@@ -20,45 +24,65 @@ Config = {}
 
 Config.KeyBind = 'E'
 
----@type DrugConfig[]
+Config.Debug = false
+
 Config.CreatedDrug = {
     {
-        label = '[E] - Collect Coke Leaves',
+        label = '[E] - Order Coke Leaves',
         donelabel = 'Collected Coke Leaves',
-        coords = vec3(-831.0637, -1332.7664, 5.1573),
-        distance = 5,
+        coords = vec3(-335.5667, -2449.2004, 7.3581),
+        distance = 2,
+        removeitem = {{ money = 'cash', amount = 1} },
         getitem = { { item = 'coca_leaf', amount = 5} },
         progress = {
-            time = 5,
+            duration = 5000,
             label = 'Collecting',
-            anim = {
-                dict = 'anim@amb@business@coc@coc_unpack_cut@',
-                clip = 'fullcut_cycle_v6_v6_player',
+            canCancel = true,
+            disable = {
+                movement = true,
+                car = true,
             },
+        },
+        blip = {
+            name = 'Coke',
+            coords = vec3(-335.5667, -2449.2004, 7.3581),
+            sprite = 497,
+            color = 4,
+            scale = 0.5,
         },
     },
     {
         label = '[E] - Proccess Coke Leaves',
         donelabel = 'Proccessed Coke Leaves',
-        coords = vec3(-828.0864, -1345.0702, 5.1533),
-        distance = 5,
+        coords = vec3(-330.3773, -2442.8318, 7.3581),
+        distance = 2,
         removeitem = { { item = 'coca_leaf', amount = 5} },
         getitem = { {item = 'coke', amount = 1} },
         progress = {
-            time = 5,
-            label = 'Proccessing',
+            duration = 5000,
+            label = 'Collecting',
+            canCancel = true,
+            disable = {
+                movement = true,
+                car = true,
+            },
         },
     },
     {
         label = '[E] - Package Coke',
         donelabel = 'Packaged Coke',
-        coords = vec3(-818.7264, -1335.6440, 5.1506),
-        distance = 5,
+        coords = vec3(-323.9514, -2441.3103, 7.3581),
+        distance = 2,
         removeitem = { {item = 'coke', amount = 1}, {item = 'empty_weed_bag', amount = 1} },
         getitem = { {item = 'cokebaggy', amount = 1} },
         progress = {
-            time = 5,
-            label = 'Packageing',
+            duration = 5000,
+            label = 'Collecting',
+            canCancel = true,
+            disable = {
+                movement = true,
+                car = true,
+            },
         },
     },
 }
